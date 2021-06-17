@@ -1,6 +1,6 @@
 # Java-todoapplication
 - This is a console-based application, in which the user can create his todo list and can perform all the CRUD operations on it.
-- Loosely coupling is used in this application, to make it easier to add and update.
+- This application has a loosely coupled architecture for easy updation of the code and new features can be added easily.
 - Output is in the Customized Table Format.
 
 - To run the application, follow these steps:
