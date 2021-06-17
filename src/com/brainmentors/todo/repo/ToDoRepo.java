@@ -20,12 +20,11 @@ public class ToDoRepo implements IToDoRepo {
 	private static ToDoRepo todoRepo; // null
 
 	private ToDoRepo() throws IOException {
-		System.out.println(Constants.PATH);
 		file = new File(Constants.PATH);
 		var path = Paths.get(Constants.PATH);
 		Files.createDirectories(path.getParent());
-		if (file.createNewFile())
-			System.out.println("File is empty! Please add task.");
+		if(file.createNewFile())
+			System.out.println("File Created");
 	}
 
 	public static ToDoRepo getInstance() throws IOException {

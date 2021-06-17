@@ -1,6 +1,7 @@
 package com.brainmentors.todo.view;
 
 import static com.brainmentors.todo.utils.Constants.ADD_TASK;
+import static com.brainmentors.todo.utils.Constants.DELETED;
 import static com.brainmentors.todo.utils.Constants.EXIT;
 import static com.brainmentors.todo.utils.Constants.PRINT_TASK;
 import static com.brainmentors.todo.utils.Constants.DELETE_TASK;
@@ -21,6 +22,8 @@ import com.brainmentors.todo.repo.ToDoRepo;
 import com.brainmentors.todo.utils.Utilities;
 
 public class ToDoView {
+	private static String[] headers = { "Name", "Description", "Created at", "Modified at", "To be Completed By",
+			"Status" };
 
 	public static boolean updateFile(ArrayList<ToDoDTO> tasks) {
 		try {
@@ -31,7 +34,7 @@ public class ToDoView {
 		}
 		return false;
 	}
-	
+
 	private static void addTask() {
 		System.out.println(getValue("input.taskname"));
 		String name = scanner.nextLine();
@@ -85,7 +88,7 @@ public class ToDoView {
 			}
 			var clt = Utilities.getCltInstance();
 			clt.setShowVerticalLines(true);
-			clt.setHeaders("Name", "Description", "Created at", "Modified at", "To be Completed By", "Status");
+			clt.setHeaders(headers);
 			for (ToDoDTO task : tasks) {
 				System.out.println(task);
 			}
@@ -112,7 +115,7 @@ public class ToDoView {
 				return;
 			}
 			for (ToDoDTO task : tasks) {
-				if (task.getName().equals(taskName) && !task.getStatus().equals("Deleted")) {
+				if (task.getName().equals(taskName) && !task.getStatus().equals(DELETED)) {
 					taskToSearch = task;
 					break;
 				}
@@ -121,13 +124,13 @@ public class ToDoView {
 			e.printStackTrace();
 		}
 		if (taskToSearch == null) {
-			System.out.println("Task Not Found!");
+			System.out.println(getValue("tasknotfound"));
 			return;
 		}
-		
+
 		var clt = Utilities.getCltInstance();
 		clt.setShowVerticalLines(true);
-		clt.setHeaders("Name", "Description", "Created at", "Modified at", "To be Completed By", "Status");
+		clt.setHeaders(headers);
 		System.out.println(taskToSearch);
 		clt.print();
 		Utilities.deleteCltInstance();
@@ -174,7 +177,7 @@ public class ToDoView {
 				return;
 			}
 			for (ToDoDTO task : tasks) {
-				if (task.getName().equals(taskName) && !task.getStatus().equals("Deleted")) {
+				if (task.getName().equals(taskName) && !task.getStatus().equals(DELETED)) {
 					taskToSearch = task;
 					break;
 				}
@@ -183,18 +186,18 @@ public class ToDoView {
 			e.printStackTrace();
 		}
 		if (taskToSearch == null) {
-			System.out.println("Task Not Found!");
+			System.out.println(getValue("tasknotfound"));
 			return;
 		}
 
 		var clt = Utilities.getCltInstance();
 		clt.setShowVerticalLines(true);
-		clt.setHeaders("Name", "Description", "Created at", "Modified at", "To be Completed By", "Status");
+		clt.setHeaders(headers);
 		System.out.println(taskToSearch);
 		System.out.println("Current Details: ");
 		clt.print();
 		Utilities.deleteCltInstance();
-		
+
 		System.out.println("What do you want to update? ");
 		System.out.println("1. Name");
 		System.out.println("2. Description");
@@ -202,6 +205,7 @@ public class ToDoView {
 		System.out.println("4. Status");
 		System.out.println(getValue("choice"));
 		var choice = scanner.nextInt();
+		scanner.nextLine();
 		switch (choice) {
 		case 1:
 			updateName(taskToSearch);
@@ -219,10 +223,10 @@ public class ToDoView {
 			System.out.println("Invalid Choice... Please try choice");
 		}
 		taskToSearch.setModifiedTime(new Date());
-		
+
 		clt = Utilities.getCltInstance();
 		clt.setShowVerticalLines(true);
-		clt.setHeaders("Name", "Description", "Created at", "Modified at", "To be Completed By", "Status");
+		clt.setHeaders(headers);
 		System.out.println(taskToSearch);
 		System.out.println("Updated Details: ");
 		clt.print();
@@ -231,7 +235,7 @@ public class ToDoView {
 	}
 
 	public static void deleteTask() {
-		
+
 		System.out.println(getValue("delete.taskname"));
 		String taskName = scanner.nextLine();
 		ToDoDTO taskToSearch = null;
@@ -255,21 +259,30 @@ public class ToDoView {
 			e.printStackTrace();
 		}
 		if (taskToSearch == null) {
-			System.out.println("Task Not Found!");
+			System.out.println(getValue("tasknotfound"));
 			return;
 		}
 
 		var clt = Utilities.getCltInstance();
 		clt.setShowVerticalLines(true);
-		clt.setHeaders("Name", "Description", "Created at", "Modified at", "To be Completed By", "Status");
+		clt.setHeaders(headers);
 		System.out.println(taskToSearch);
 		System.out.println("Current Details: ");
 		clt.print();
 		Utilities.deleteCltInstance();
-		
-		taskToSearch.setModifiedTime(new Date());
-		taskToSearch.setStatus("Deleted");
-		
+
+		System.out.println("Do you want to delete? (Y/N): ");
+		String confirm=scanner.next();
+		scanner.nextLine();
+		if(confirm.equals("Y")) {
+			taskToSearch.setModifiedTime(new Date());
+			taskToSearch.setStatus(DELETED);
+			System.out.println("Task Deleted");
+		}
+		else {
+			System.out.println("Task Deletion Cancelled");
+		}
+
 		Utilities.deleteCltInstance();
 		updateFile(tasks);
 

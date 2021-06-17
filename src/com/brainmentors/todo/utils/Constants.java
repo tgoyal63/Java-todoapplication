@@ -10,6 +10,7 @@ public interface Constants {
 	int EXIT = 6;
 	String PENDING = "Pending";
 	String COMPLETE = "Completed";
+	String DELETED = "Deleted";
 	String PATH = System.getProperty("user.dir") + "\\src\\files\\tasks.dat";
 
 }
